@@ -17,12 +17,19 @@ public class EmployeeService {
     public EmployeeService(EmployeeRepository repo) {
         this.repo = repo;
     }
+
+    public Employee create(Employee employee) {
+        return repo.save(employee);
+    }
+
     public List<Employee> getAll() {
         return repo.findAll();
     }
 
-    public Employee create(Employee employee) {
-        return repo.save(employee);
+
+    public Employee getById(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException(id));
     }
 
     // Ensure the updated employee has the same ID as the existing one
@@ -52,10 +59,6 @@ public class EmployeeService {
         return existingEmployee;
     }
 
-    public Employee getById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException(id));
-    }
 
     public void delete( Long id){
         Employee employee=repo.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
